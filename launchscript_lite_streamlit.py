@@ -24,9 +24,9 @@ def format_twitter_thread(raw_text):
     return "\n\n".join(tweets[:5])
 
 def format_hooks(raw_text):
-    hooks = re.split(r"\n|\d\.\s?", raw_text.strip())
-    cleaned = [re.sub(r"<.*?>", "", h).strip(" .'\n") for h in hooks if h.strip()]
-    return "\n".join(cleaned[:3])
+    hooks = re.findall(r"\d\.\s(.+?)(?=\n\d\.|\Z)", raw_text.strip(), re.DOTALL)
+    cleaned = [h.strip(" .'\n") for h in hooks if len(h.strip()) > 10 and len(h.strip()) < 100]
+    return "\n".join(cleaned[:3]) if cleaned else raw_text
 
 def query_model(prompt):
     try:
@@ -55,7 +55,7 @@ def generate_all(prompt):
             f"Write a fast-paced, conversational script for a YouTube Short (under 60 seconds) on the topic: {prompt}. Start with a hook, give 2-3 punchy value points, and end with a clear call to action. Do not mention AI."
         ),
         "🎯 Hook Ideas": query_model(
-            f"Write 3 viral-style content hooks for a social post about: {prompt}. Keep them curiosity-driven, under 80 characters, and avoid any HTML or formatting tags."
+            f"Write 3 short, bold, curiosity-driven content hooks for social media about: {prompt}. Each should be under 80 characters. Format as: 1. Hook one 2. Hook two 3. Hook three. Do not explain or describe them."
         )
     }
     if "🧵 Twitter Thread" in outputs:
