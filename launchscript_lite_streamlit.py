@@ -6,8 +6,8 @@ st.set_page_config(page_title="LaunchScript Lite", layout="centered")
 st.title("🚀 LaunchScript Lite")
 st.subheader("Turn your ideas into content with AI — no setup needed.")
 
-# Use a reliable Hugging Face model with API token from Streamlit Secrets
-API_URL = "https://api-inference.huggingface.co/models/google/flan-t5-small"
+# Updated model to flan-t5-base (smaller and more responsive)
+API_URL = "https://api-inference.huggingface.co/models/google/flan-t5-base"
 headers = {"Authorization": f"Bearer {st.secrets['HUGGINGFACE_TOKEN']}"}
 
 def query_model(prompt):
