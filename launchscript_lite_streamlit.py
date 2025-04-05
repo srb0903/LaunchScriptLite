@@ -1,4 +1,3 @@
-
 import streamlit as st
 import requests
 
@@ -7,7 +6,7 @@ st.set_page_config(page_title="LaunchScript Lite", layout="centered")
 st.title("🚀 LaunchScript Lite")
 st.subheader("Turn your ideas into content with AI — no setup needed.")
 
-# Hugging Face model that supports anonymous usage
+# Open model that does not require authentication
 API_URL = "https://api-inference.huggingface.co/models/bigscience/bloomz-560m"
 
 def query_model(prompt):
@@ -25,7 +24,7 @@ def generate_all(prompt):
     return {
         "🧵 Twitter Thread": query_model(f"Write a 5-tweet thread for solo creators about: {prompt}"),
         "💼 LinkedIn Post": query_model(f"Write a short professional LinkedIn post about: {prompt}"),
-        "🎬 YouTube Script": query_model(f"Write a 60-second YouTube script for: {prompt}"),
+        "🎮 YouTube Script": query_model(f"Write a 60-second YouTube script for: {prompt}"),
         "🎯 Hook Ideas": query_model(f"Write 3 catchy titles for a post about: {prompt}")
     }
 
