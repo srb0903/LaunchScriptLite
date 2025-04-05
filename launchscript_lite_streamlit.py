@@ -6,18 +6,22 @@ st.set_page_config(page_title="LaunchScript Lite", layout="centered")
 st.title("🚀 LaunchScript Lite")
 st.subheader("Turn your ideas into content with AI — no setup needed.")
 
-# Updated model to flan-t5-base (smaller and more responsive)
-API_URL = "https://api-inference.huggingface.co/models/google/flan-t5-base"
+# Swapped to Falcon-7B Instruct for high-quality responses
+API_URL = "https://api-inference.huggingface.co/models/tiiuae/falcon-7b-instruct"
 headers = {"Authorization": f"Bearer {st.secrets['HUGGINGFACE_TOKEN']}"}
 
 def query_model(prompt):
     try:
         response = requests.post(API_URL, headers=headers, json={"inputs": prompt})
+        if response.status_code != 200:
+            return f"⚠️ Error: {response.status_code}"
         result = response.json()
-        if response.status_code == 200 and isinstance(result, list) and "generated_text" in result[0]:
+        if isinstance(result, list) and "generated_text" in result[0]:
             return result[0]["generated_text"]
+        elif isinstance(result, dict) and "generated_text" in result:
+            return result["generated_text"]
         else:
-            return f"⚠️ Error: {result.get('error', 'Unknown error')}"
+            return "⚠️ The model responded but no text was returned. Try again."
     except Exception as e:
         return f"⚠️ Exception: {str(e)}"
 
