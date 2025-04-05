@@ -20,12 +20,12 @@ def clean_output(text):
 
 def format_twitter_thread(raw_text):
     tweets = re.findall(r"(?:^|\n)(\d\.\s?.+?)(?=\n\d\.|\Z)", raw_text.strip(), re.DOTALL)
-    tweets = [tweet.strip() for tweet in tweets if tweet.strip()]
-    return "\n\n".join(tweets[:5])
+    tweets = [tweet.strip() for tweet in tweets if tweet.strip() and len(tweet) > 30]
+    return "\n\n".join(tweets[:5]) if tweets else raw_text
 
 def format_hooks(raw_text):
     hooks = re.findall(r"\d\.\s(.+?)(?=\n\d\.|\Z)", raw_text.strip(), re.DOTALL)
-    cleaned = [h.strip(" .'\n") for h in hooks if len(h.strip()) > 10 and len(h.strip()) < 100]
+    cleaned = [h.strip(" .'\n") for h in hooks if len(h.strip()) > 20 and 'ask' not in h.lower() and 'repurpose' not in h.lower() and 'engage' not in h.lower()]
     return "\n".join(cleaned[:3]) if cleaned else raw_text
 
 def query_model(prompt):
@@ -46,7 +46,7 @@ def query_model(prompt):
 def generate_all(prompt):
     outputs = {
         "🧵 Twitter Thread": query_model(
-            f"Write a Twitter thread with 5 tweets that explains this topic: '{prompt}'. The first tweet should hook attention using the topic naturally. The rest should add value, build interest, and end with a takeaway or CTA. Number them 1-5 and limit to 280 characters each."
+            f"You're a solo creator writing for Twitter. Write a compelling 5-part thread on this topic: {prompt}. The first tweet should grab attention. The next three should build insight or value. The fifth should be a takeaway or CTA. Each tweet must be numbered and formatted as if you're tweeting."
         ),
         "💼 LinkedIn Post": query_model(
             f"Write a personal and professional LinkedIn post for solo entrepreneurs. It should feel human, reflective, and helpful about this topic: {prompt}. Avoid saying 'as an AI model' and do not repeat the prompt."
@@ -55,7 +55,7 @@ def generate_all(prompt):
             f"Write a fast-paced, conversational script for a YouTube Short (under 60 seconds) on the topic: {prompt}. Start with a hook, give 2-3 punchy value points, and end with a clear call to action. Do not mention AI."
         ),
         "🎯 Hook Ideas": query_model(
-            f"Write 3 short, bold, curiosity-driven content hooks for social media about: {prompt}. Each should be under 80 characters. Format as: 1. Hook one 2. Hook two 3. Hook three. Do not explain or describe them."
+            f"You're a social media copywriter. Write 3 short, curiosity-driven headline hooks for: {prompt}. Make them emotional or intriguing. No explanations or tips, just the hook. Each under 80 characters. Format as: 1. ... 2. ... 3. ..."
         )
     }
     if "🧵 Twitter Thread" in outputs:
