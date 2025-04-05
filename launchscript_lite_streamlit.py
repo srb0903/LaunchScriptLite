@@ -6,8 +6,8 @@ st.set_page_config(page_title="LaunchScript Lite", layout="centered")
 st.title("🚀 LaunchScript Lite")
 st.subheader("Turn your ideas into content with AI — no setup needed.")
 
-# Open model that does not require authentication
-API_URL = "https://api-inference.huggingface.co/models/bigscience/bloomz-560m"
+# New open model that supports anonymous usage reliably
+API_URL = "https://api-inference.huggingface.co/models/mrm8488/t5-base-finetuned-common_gen"
 
 def query_model(prompt):
     try:
@@ -22,10 +22,10 @@ def query_model(prompt):
 
 def generate_all(prompt):
     return {
-        "🧵 Twitter Thread": query_model(f"Write a 5-tweet thread for solo creators about: {prompt}"),
-        "💼 LinkedIn Post": query_model(f"Write a short professional LinkedIn post about: {prompt}"),
-        "🎮 YouTube Script": query_model(f"Write a 60-second YouTube script for: {prompt}"),
-        "🎯 Hook Ideas": query_model(f"Write 3 catchy titles for a post about: {prompt}")
+        "🧵 Twitter Thread": query_model(f"Generate a short Twitter thread about: {prompt}"),
+        "💼 LinkedIn Post": query_model(f"Write a professional LinkedIn post about: {prompt}"),
+        "🎮 YouTube Script": query_model(f"Write a YouTube script introduction for: {prompt}"),
+        "🎯 Hook Ideas": query_model(f"List 3 catchy content titles for: {prompt}")
     }
 
 with st.form("content_form"):
